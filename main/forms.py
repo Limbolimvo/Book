@@ -1,11 +1,11 @@
 from .models import Person
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm, TextInput, EmailInput
 
 
 class PersonForm(ModelForm):
     class Meta:
         model = Person
-        fields = ["name", "last_name", "phone", "email", "address", "company"]    #список полей, которые должны присутствовать в форме
+        fields = ["name", "last_name", "phone", "email", "address", "company", "photo"]    #список полей, которые должны присутствовать в форме
         widgets = {
             "name": TextInput(attrs={
                 'class': 'form-control',
@@ -19,7 +19,7 @@ class PersonForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': '+380'
             }),
-            "email": TextInput(attrs={
+            "email": EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'you@example.com'
             }),

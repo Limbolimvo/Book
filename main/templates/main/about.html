@@ -5,29 +5,47 @@
 {% endblock %}
 
 {% block content %}
-    <main class="px-3">
-        <h1>Контакты</h1>
-        <p class="lead"> <a  href="{% url 'new_contacts' %}" class="btn btn-lg btn-light fw-bold border-white bg-white">Создать контакт</a></p>
-    </main>
-    {% if contacts %}
-        {% for el in contacts %}
-            <p class="lead">
-                <hr class="my-4">
-                <div class="col-sm-6">
-                    <label for="name" class="form-label">Имя</label>
-                    <small class="form-control" id="name">{{ el.name }}</small>
-                </div>
-                <div class="col-sm-6">
-                    <label for="last_name" class="form-label">Имя</label>
-                    <small class="form-control" id="last_name">{{ el.last_name }}</small>
-                </div>
-                <div class="col-12">
-                    <label for="phone" class="form-label">Номер телефона</label>
-                    <small class="form-control" id="phone">{{ el.phone }}</small>
-                </div>
-            </p>
-        {% endfor %}
+    {% if user.is_authenticated %}
+        <main class="px-3">
+            <h1>Контакты</h1>
+            <p class="lead"> <a  href="{% url 'new_contact' %}" class="btn btn-lg btn-light fw-bold border-white bg-white">Создать контакт</a></p>
+        </main>
+        {% if contacts %}
+            {% for el in contacts %}
+                <p class="lead">
+
+                    <hr class="my-4">
+                    {% if el.photo %}
+                        <img src="{{ el.photo.url }}" class="bd-placeholder-img rounded-circle" width="200" height="200"  align="right">
+                    {% endif %}
+
+                    <div class="col-sm-6">
+                        <label for="name" class="form-label">Имя</label>
+                        <small class="form-control" id="name">{{ el.name }}</small>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="last_name" class="form-label">Фамилия</label>
+                        <small class="form-control" id="last_name">{{ el.last_name }}</small>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="phone" class="form-label">Номер телефона</label>
+                        <small class="form-control" id="phone">{{ el.phone }}</small>
+                    </div>
+
+                    <br/>
+                    <td align="right">
+                        <a href="{% url 'show_contact' el.id %}" class="nav-link p-0 text-muted">Подробнее</a>
+                    </td>
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>Список контактов пуст</p>
+        {% endif %}
+
     {% else %}
-        <p>Список контактов пуст</p>
+        <h1>Sorry! You Must Be Logged In To View This Page...</h1>
     {% endif %}
+
 {% endblock %}

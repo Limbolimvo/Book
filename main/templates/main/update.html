@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+
+
+{% block title%}
+Редактирование контакта
+{% endblock %}
+
+{% block content%}
+    <main class="px-3">
+        <h1>Редактирование контакта</h1>
+    </main>
+    <form method=post class="row" enctype="multipart/form-data">
+        <div class="col-md-6 col-lg-5 order-md-last">
+
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Сохранить контакт</button>
+        </div>
+    </form>
+
+
+{% endblock %}

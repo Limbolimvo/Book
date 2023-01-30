@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+
+{% block title%}
+{{ contact.name }} {{ contact.last_name }}
+{% endblock %}
+
+{% block content %}
+    <main class="px-3">
+        <h1>{{ contact.name }} {{ contact.last_name }}</h1>
+    </main>
+	<p class="lead">
+		<hr class="col-sm-4">
+
+			{% if contact.photo %}
+				<img src="{{ contact.photo.url }}" class="bd-placeholder-img rounded-circle" width="300" height="300"  align="right">
+			{% endif %}
+
+    		<div class="col-sm-6">
+				<label class="form-label">Имя</label>
+				<small class="form-control">{{ contact.name }}</small>
+
+				<label class="form-label">Фамилия</label>
+				<small class="form-control">{{ contact.last_name }}</small>
+
+				<label class="form-label">Электронная почта</label>
+				<small class="form-control">{{ contact.email }}</small>
+
+				<label class="form-label">Адрес</label>
+				<small class="form-control">{{ contact.address }}</small>
+
+				<label class="form-label">Компания</label>
+				<small class="form-control">{{ contact.company }}</small>
+
+				<br/>
+				<td align="right">
+				    <a href="{% url 'update_contact' contact.id %}" class="nav-link p-0 text-muted">Редактировать</a>
+					<br/>
+					<a href="{% url 'delete_contact' contact.id %}" class="nav-link p-0 text-muted-danger">Удалить</a>
+				</td>
+			</div>
+	</p>
+{% endblock %}

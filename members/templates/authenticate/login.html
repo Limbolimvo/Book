@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block title%}
+Мой профиль
+{% endblock %}
+
+{% block content %}
+
+	<h1>Авторизация</h1>
+        <br/>
+		<form action="" method=POST>
+			{% csrf_token %}
+		<form>
+            <div class="mb-3">
+                <label for="exampleInputLog1" class="form-label">Логин</label>
+                <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+
+			<input type="submit" value="Войти" class="btn btn-secondary">
+		</form>
+<br/><br/>
+
+{% endblock %}
