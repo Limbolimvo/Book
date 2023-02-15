@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title%}
+{% endblock %}
+
+{% block content%}
+    {% if user.is_authenticated %}
+        <main class="px-3">
+            <h1>New contact</h1>
+        </main>
+        <br>
+        <form method=post class="row" enctype="multipart/form-data">
+          <div class="col-md-6 col-lg-5 order-md-last">
+
+              {% csrf_token %}
+              {{ form.as_p }}
+
+              <button class="w-100 btn btn-primary btn-lg" type="submit">Done</button>
+          </div>
+        </form>
+    {% else %}
+        <br><br><br>
+        <div class="jumbotron">
+          <h1 class="display-3 nav justify-content-center">Sorry!</h1>
+            <br>
+          <p class="lead nav justify-content-center">You Must Be Logged In To View This Page...</p>
+        </div>
+    {% endif %}
+{% endblock %}

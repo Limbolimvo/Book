@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+
+
+{% block title%}
+{{ contact.name }} {{ contact.last_name }}
+{% endblock %}
+
+{% block content %}
+    <main class="px-3">
+        <h1>{{ contact.name }} {{ contact.last_name }}</h1>
+    </main>
+	<p class="lead">
+		<hr class="col-sm-4">
+
+			{% if contact.photo %}
+				<img src="{{ contact.photo.url }}" class="bd-placeholder-img rounded-circle" width="300" height="300"  align="right">
+			{% endif %}
+
+    		<div class="col-sm-6">
+				<label class="form-label">Name</label>
+				<small class="form-control">{{ contact.name }}</small>
+
+				<label class="form-label">Last name</label>
+				<small class="form-control">{{ contact.last_name }}</small>
+
+				<label class="form-label">Phone</label>
+				<small class="form-control">{{ contact.phone }}</small>
+
+				<label class="form-label">Email</label>
+				<small class="form-control">{{ contact.email }}</small>
+
+				<label class="form-label">Address</label>
+				<small class="form-control">{{ contact.address }}</small>
+
+				<label class="form-label">Company</label>
+				<small class="form-control">{{ contact.company }}</small>
+
+				<br/>
+				<td align="right">
+				    <a href="{% url 'update_contact' contact.id %}" class="nav-link p-0 text-muted">Edit contact</a>
+					<br/>
+					<a href="{% url 'delete_contact' contact.id %}" class="nav-link p-0 text-muted-danger">Delete</a>
+				</td>
+			</div>
+	</p>
+{% endblock %}
