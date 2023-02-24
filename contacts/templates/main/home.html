@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+
+{% block title%}
+Мой профиль
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <main class="px-3">
+			<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+		</main>
+		<p class="lead">
+			<hr class="col-sm-4">
+
+				{% if user.photo %}
+					<img src="{{ user.photo.url }}" class="bd-placeholder-img rounded-circle" width="300" height="300"  align="right">
+				{% endif %}
+
+				<div class="col-sm-6">
+					<label class="form-label">First name</label>
+					<small class="form-control">{{ user.first_name }}</small>
+
+					<label class="form-label">Last name</label>
+					<small class="form-control">{{ user.last_name }}</small>
+
+					<label class="form-label">Phone</label>
+					<small class="form-control">{{ user.phone }}</small>
+
+					<label class="form-label">Email</label>
+					<small class="form-control">{{ user.email }}</small>
+
+					<label class="form-label">Company</label>
+					<small class="form-control">{{ user.company }}</small>
+				</div>
+		</p>
+    {% else %}
+        <br><br><br>
+        <div class="jumbotron">
+          <h1 class="display-3 nav justify-content-center">Sorry!</h1>
+            <br>
+          <p class="lead nav justify-content-center">You Must Be Logged In To View This Page...</p>
+        </div>
+    {% endif %}
+
+{% endblock %}
