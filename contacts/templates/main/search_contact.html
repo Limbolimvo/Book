@@ -6,8 +6,8 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <main class="px-3">
-            <h1>My contacts</h1>
+         <main class="px-3">
+            <h1>Search contact</h1>
         </main>
         <br>
         <table class="table table-hover">
@@ -37,7 +37,7 @@
                     </tbody>
                 {% endfor %}
             {% else %}
-                <p>Contact list is empty</p>
+                <p>Contacts with this first or last name were not found</p>
             {% endif %}
         </table>
     {% else %}

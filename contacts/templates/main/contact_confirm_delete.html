@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title%}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <form method="post">{% csrf_token %}
+            <p>Are you sure you want to delete contact "{{ contact.name }} {{ contact.last_name }}"?</p>
+            <input type="submit" value="Confirm">
+        </form>
+    {% else %}
+        <br><br><br>
+        <div class="jumbotron">
+          <h1 class="display-3 nav justify-content-center">Sorry!</h1>
+            <br>
+          <p class="lead nav justify-content-center">You Must Be Logged In To View This Page...</p>
+        </div>
+    {% endif %}
+{% endblock %}

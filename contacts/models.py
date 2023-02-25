@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 
 class Contact(models.Model):
@@ -18,3 +19,6 @@ class Contact(models.Model):
     class Meta:  # изменение название таблички
         verbose_name = 'Contact'
         verbose_name_plural = 'Contacts'
+
+    def get_absolute_url(self):
+        return reverse('contact_details', args=[str(self.id)])

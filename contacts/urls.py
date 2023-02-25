@@ -8,12 +8,13 @@ router.register(r'api/contacts', views.ContactViewSet)
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('contacts', views.all_contacts, name='contacts'),
-    path('new_contact', views.AddContact.as_view(), name='new_contact'),
-    path('show_contact/<contact_id>', views.show_contact, name='show_contact'),
-    path('update_contact/<contact_id>', views.update_contact, name='update_contact'),
-    path('delete_contact/<contact_id>', views.delete_contact, name='delete_contact'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('contacts', views.ContactsList.as_view(), name='contacts'),
+    path('new-contact', views.AddContact.as_view(), name='new_contact'),
+    path('contact/<int:pk>/', views.ContactDetail.as_view(), name='contact_details'),
+    path('contact/edit/<int:pk>', views.ContactUpdate.as_view(), name='update_contact'),
+    path('contact/delete/<int:pk>', views.ContactDelete.as_view(), name='delete_contact'),
+    path('search_result', views.SearchResultsView.as_view(), name='search'),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -1,27 +1,32 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView
+from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.db.models import Q
 
 from .models import Contact
 from .forms import ContactForm
-from django.contrib import messages
 from rest_framework import viewsets, permissions
 
 from .serializers import ContactSerializer
 
-
-def home(request):
-    return render(request, 'main/home.html')
+User = get_user_model()
 
 
-def all_contacts(request):
-    if request.user.is_authenticated:
-        current_user = request.user
-        contacts = Contact.objects.filter(owner=current_user).order_by('name')
-        return render(request, 'main/all_contacts.html', {
-            'contacts': contacts
-        })
-    else:
-        return redirect('contacts')
+class HomeView(ListView):
+    model = User
+    template_name = 'main/home.html'
+
+
+class ContactsList(ListView):
+    model = Contact
+    template_name = 'main/all_contacts.html'
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(ContactsList, self).get_queryset(*args, **kwargs)
+        current_user = self.request.user
+        qs = qs.filter(owner=current_user).order_by("name")
+        return qs
 
 
 class AddContact(CreateView):
@@ -35,62 +40,36 @@ class AddContact(CreateView):
         instance.save()
         return redirect('contacts')
 
-    # def create_contact(request):
-    #     if request.method == 'POST':  # если данные передаются методом ПОСТ
-    #         form = ContactForm(request.POST, request.FILES)  # мы их получаем
-    #         current_user = request.user
-    #         if form.is_valid():  # и если данные введены корректно, то сохраняем их следующей строкой
-    #             contact = form.save(commit=False)
-    #             contact.owner = current_user  # logged in user
-    #             contact.save()
-    #             return redirect('contacts')
+
+class ContactDetail(DetailView):
+    model = Contact
+    template_name = 'main/show_contact.html'
 
 
-def show_contact(request, contact_id):
-    contact = Contact.objects.get(pk=contact_id)
-    return render(request, 'main/show_contact.html',
-                  {"contact": contact}
-                  )
+class ContactUpdate(UpdateView):
+    form_class = ContactForm
+    model = Contact
+    template_name = 'main/update_contact.html'
 
 
-def update_contact(request, contact_id):
-    contact = Contact.objects.get(pk=contact_id)
-    form = ContactForm(request.POST or None, request.FILES or None, instance=contact)
-    if form.is_valid():
-        form.save()
-        return redirect('contacts')
-
-    return render(request, 'main/update_contact.html',
-                  {'contact': contact,
-                   'form': form})
+class ContactDelete(DeleteView):
+    model = Contact
+    success_url = reverse_lazy('contacts')
+    template_name = "main/contact_confirm_delete.html"
 
 
-def delete_contact(request, contact_id):
-    contact = Contact.objects.get(pk=contact_id)
-    current_user = request.user
-    if current_user == contact.owner:
-        contact.photo.delete(save=True)
-        contact.delete()
-        messages.success(request, ("Contact Deleted!!"))
-        return redirect('contacts')
-    else:
-        messages.success(request, ("You Aren't Authrized To Delete Thes Contact!!"))
-        return redirect('contacts')
+class SearchResultsView(ListView):
+    model = Contact
+    template_name = 'main/all_contacts.html'
 
-
-def search_venues(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-        contact = Contact.objects.filter(name__contains=searched)
-
-        return render(request,
-                      'main/search_contact.html',
-                      {'searched': searched,
-                       'contact': contact})
-    else:
-        return render(request,
-                      'main/search_contact.html',
-                      {})
+    def get_queryset(self):  # new
+        query = self.request.GET.get('q')
+        current_user = self.request.user
+        qs = Contact.objects.filter(owner=current_user)
+        object_list = qs.filter(
+            Q(name__icontains=query) | Q(last_name__icontains=query) | Q(phone__icontains=query)
+        )
+        return object_list
 
 
 class ContactViewSet(viewsets.ModelViewSet):
