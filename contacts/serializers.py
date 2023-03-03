@@ -1,13 +1,16 @@
-from .models import Contact
 from rest_framework import serializers
+from .models import Contact
 
 
-class ContactSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField(
-        read_only=True,
-    )
-
+class ContactViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ["name", "owner"]
-        # exclude = ["phone",]
+        fields = '__all__'
+
+
+class ContactDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        exclude = ['id', ]
+
+

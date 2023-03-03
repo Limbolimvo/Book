@@ -1,14 +1,19 @@
 {% extends 'main/base.html' %}
 
 {% block title%}
-{{ title }}
+Confirm delete
 {% endblock %}
 
 {% block content %}
     {% if user.is_authenticated %}
         <form method="post">{% csrf_token %}
-            <p>Are you sure you want to delete contact "{{ contact.name }} {{ contact.last_name }}"?</p>
-            <input type="submit" value="Confirm">
+            <div class="jumbotron">
+                <br>
+                <p class="lead nav justify-content-left">
+                    Are you sure you want to delete contact "{{ contact.first_name }} {{ contact.last_name }}"?
+                </p><br>
+                <input type="submit" value="Confirm">
+            </div>
         </form>
     {% else %}
         <br><br><br>

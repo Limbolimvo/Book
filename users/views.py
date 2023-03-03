@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from rest_framework import generics, permissions
 
 from .forms import UserCreationForm
+from .serializers import UserSerializer
 
 
 def login_user(request):
@@ -42,3 +42,13 @@ def register_user(request):
     return render(request, 'authenticate/register_user.html', {
         'form': form
     })
+
+
+class CreateUserView(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        instance.set_password(instance.password)
+        instance.save()

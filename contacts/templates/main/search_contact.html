@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block title%}
-{{ title }}
+Search contact
 {% endblock %}
 
 {% block content %}
@@ -13,32 +13,28 @@
         <table class="table table-hover">
             {% if object_list %}
                 <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Last name</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
+                <tr>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
                 </thead>
                 {% for object in object_list %}
                     <tbody>
                         <tr>
-                            <td>{{ object.name }}</td>
+                            <td>{{ object.first_name }}</td>
                             <td>{{ object.last_name }}</td>
                             <td>{{ object.phone }}</td>
                             <td><a href="{% url 'contact_details' object.id %}" class="nav-link p-0 text-muted">More information</a></td>
-                            {% if el.photo %}
-                                <td><img src="{{ object.photo.url }}" class="bd-placeholder-img rounded-circle" width="100" height="100"  align="right"></td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
+                            <td><a href="{% url 'update_contact' object.id %}" class="nav-link p-0 text-muted">Edit</a></td>
+                            <td><a href="{% url 'delete_contact' object.id %}" class="nav-link p-0 text-muted">Delete</a></td>
                         </tr>
                     </tbody>
                 {% endfor %}
-            {% else %}
-                <p>Contacts with this first or last name were not found</p>
-            {% endif %}
+
         </table>
     {% else %}
         <br><br><br>

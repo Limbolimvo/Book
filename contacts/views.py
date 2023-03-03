@@ -3,12 +3,14 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .models import Contact
 from .forms import ContactForm
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 
-from .serializers import ContactSerializer
+from .permissions import IsOwner
+from .serializers import ContactViewSerializer, ContactDetailSerializer
 
 User = get_user_model()
 
@@ -25,7 +27,7 @@ class ContactsList(ListView):
     def get_queryset(self, *args, **kwargs):
         qs = super(ContactsList, self).get_queryset(*args, **kwargs)
         current_user = self.request.user
-        qs = qs.filter(owner=current_user).order_by("name")
+        qs = qs.filter(owner=current_user).order_by("first_name")
         return qs
 
 
@@ -67,12 +69,22 @@ class SearchResultsView(ListView):
         current_user = self.request.user
         qs = Contact.objects.filter(owner=current_user)
         object_list = qs.filter(
-            Q(name__icontains=query) | Q(last_name__icontains=query) | Q(phone__icontains=query)
+            Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(phone__icontains=query)
         )
         return object_list
 
 
-class ContactViewSet(viewsets.ModelViewSet):
+class ContactListView(generics.ListCreateAPIView):
     queryset = Contact.objects.all()
-    serializer_class = ContactSerializer
-    permission_classes = [permissions.AllowAny]
+    serializer_class = ContactViewSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactDetailSerializer
+    permission_classes = [IsAuthenticated | IsOwner | IsAdminUser]
+

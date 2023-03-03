@@ -4,7 +4,7 @@ from django.urls import reverse
 
 
 class Contact(models.Model):
-    name = models.CharField('Name', max_length=30)
+    first_name = models.CharField('First name', max_length=30)
     last_name = models.CharField('Last name', max_length=30)
     phone = models.CharField('Phone', max_length=30, null=False, blank=False)
     email = models.EmailField('Email', max_length=50)
@@ -14,7 +14,7 @@ class Contact(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.first_name + '' + self.last_name
 
     class Meta:  # изменение название таблички
         verbose_name = 'Contact'
@@ -22,3 +22,4 @@ class Contact(models.Model):
 
     def get_absolute_url(self):
         return reverse('contact_details', args=[str(self.id)])
+

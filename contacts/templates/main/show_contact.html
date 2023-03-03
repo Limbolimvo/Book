@@ -2,13 +2,13 @@
 
 
 {% block title%}
-{{ contact.name }} {{ contact.last_name }}
+Contact info
 {% endblock %}
 
 {% block content %}
 	{% if user.is_authenticated %}
 		<main class="px-3">
-			<h1>{{ contact.name }} {{ contact.last_name }}</h1>
+			<h1>{{ contact.first_name }} {{ contact.last_name }}</h1>
 		</main>
 		<p class="lead">
 			<hr class="col-sm-4">
@@ -18,8 +18,8 @@
 				{% endif %}
 
 				<div class="col-sm-6">
-					<label class="form-label">Name</label>
-					<small class="form-control">{{ contact.name }}</small>
+					<label class="form-label">First name</label>
+					<small class="form-control">{{ contact.first_name }}</small>
 
 					<label class="form-label">Last name</label>
 					<small class="form-control">{{ contact.last_name }}</small>
